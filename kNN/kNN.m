@@ -1,48 +1,48 @@
-function re = kNN(p,  q, k, l)
-% TODO: for the options
-%function re = findNearNeighbors(p,  q, options)
+function re = kNN(p,  q, k, l, options)
 % check whether the binary vector p is the near neighbors of q ( H(p,q) <= k) with the options
 % 
-%  re is 
-% some ideas borrow from kmean.m
+% INPUT:
+%       p, q                  -   the binary vector p, and the query q
+%          k                    -   the hamming distance
+%          l                     -   the partition number
+%
+%      options(1)    -    max. number of iteration (default: 100)
+%      options(2)    -    info display during iteration (default: 1)
+%
+% OUTPUT:
+%           re                 -    [0, 1] (0 means that p is the k nearneighbor of q; 1 is not)
+%
 %
 
-% if nargin ~=3 & nargin ~= 4,
-%     error('Too many or too few input arguments!');
-% end
-% 
-% % the default options
-% default_options = [  
-%                                          3 ;        % the num of partitions, should be larger than the hamming distance 
-%                                         10;       % max. number of iteration
-%                                           2;         % the hamming distance
-%                                         1e-6;    %
-%                                         1 ];        % info display during iteration
-% 
-%  if nargin == 3,
-%        options = default_options;
-%  else
-%        % if "options" is not fully specified
-%        if length(options) < length(default_options),
-%             tmp = default_options;
-%             tmp(1:length(options)) = options;
-%             options = tmp;
-%      end
-%      % if some entries of "options" are nan's, replace them with defaults
-%      nan_index = find(isnan(options)==1);
-%      options(nan_index) = default_options(nan_index);
-%      
-%  end
-% 
-%  k = options(1);                      % the hamming distance
-% % l = options(2);                       % num of partitions
-%  max_iter = options(3);       % max. iteration
-%  min_impro = options(4);  % min. improvement
-%  display = options(5);          % Display info or not
+if nargin ~=4 && nargin ~= 5,
+    error('Too many or too few input arguments!');
+end
+
+% the default options
+default_options = [     100;         % max. number of iteration
+                                             1 ];         % info display during iteration
+
+ if nargin == 4,
+       options = default_options;
+ else
+       % if "options" is not fully specified
+       if length(options) < length(default_options),
+            tmp = default_options;
+            tmp(1:length(options)) = options;
+            options = tmp;
+     end
+     % if some entries of "options" are nan's, replace them with defaults
+     nan_index = find(isnan(options)==1);
+     options(nan_index) = default_options(nan_index);
+     
+ end
+
+ max_iter = options(1);       % max. iteration
+ display = options(2);          % Display info or not
 
 % Init test parameters
 %D =  length(p);
-max_iter= 50;
+%max_iter= 10;
 % C controls the stopping criteria
 C = (k / length(p)) * l;
 
@@ -63,8 +63,7 @@ for i = 1 :  l
         disp(binaryVectorToString( q_substrings{i} ));
 
        %check if p_substrings{i} and p_substrings{i} is Inf; 
-       %the prime parameter should be larger than one for the accurancy
-       [result, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 1);
+       [result, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 2);
 
         if result ~= 0,  % pi != qi
                  m = m + 1;   
@@ -96,9 +95,14 @@ if m > k,
 else  % m <= k ,
           % this instance p might be the one we are looking for
           % goto the next layer 
-           for iter = 2 : max_iter  % on the 2nd layer now
+           for i = 2 : max_iter  % on the 2nd layer now
                  [p_new, q_new, m_new]  = stepknn(p_new,  q_new);  % It might use the different struct to deal with p_new, q_new
 
+                 if display,
+                     fprintf('Iteration %d\n', i);
+                 end
+                 
+                 % check termination condition
                   if m_new > k,
                        re = 1;
                        break;
@@ -106,7 +110,7 @@ else  % m <= k ,
 
                   % if  p_new is the same as p before
                   %
-                  if m_new <=  2^iter * C,  % menas that H(p, q) <= k
+                  if m_new <=  (2^i) * C,  % menas that H(p, q) <= k
                         re = 0;
                         break;
                   end

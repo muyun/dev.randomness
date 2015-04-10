@@ -15,7 +15,7 @@ p_substrings = cellSplit(p, l);
 q_substrings = cellSplit(q, l);
 
 %
-len_ps = length(p_substrings);
+len_ps = numel(p_substrings);
 
 % TODO optimize 
 p_new = {};
@@ -31,10 +31,10 @@ for i = 1 : len_ps
        disp(binaryVectorToString( q_substrings{i} ));
        
        %check if p_substrings{i} and p_substrings{i} is Inf
-        [result, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 1);
+        [re, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 1);
 
-        if result ~= 0,  % pi != qi
-                     m = m + 1;  % 
+        if re ~= 0,  % pi != qi
+                     m = m + 1;  
                       %  put it in the new p and q  
                       %  To optimize
                      p_new{m} = p_substrings{i} ;

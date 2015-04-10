@@ -8,7 +8,7 @@ function [result,  err] = randomizedProtocol(x,  y, m)
 %         m             -      integer          ->  the times the protocol executes the work, always with an independent, new choice of a prime
 %
 %  OUTPUT:
-%      result          -   [0, 1]  ->  0 means "x = y"; 1 is not
+%      result          -   [0, 1]  (0 means "x = y"; 1 is not)
 %      err             -   err = ( ln (n^2) / n ) ^m                                          
 %
 %   The complexity:

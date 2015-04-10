@@ -1,8 +1,13 @@
 clear, clc;
-% kNN(q, k)
+% knn(q, k)
 %
-% recursion method is used here although there is a bit limition of matlab
-%   
+% divide-and-conquer
+%
+% TODO:
+%       1.  update the code 
+%       2.  fix the prime err in randomizedProtocol code  - Done
+%       3.  return the candidate index list smaller than k hamming distance  -  to wrapper
+%       
 
 % Init 
 % uniformly T = N x D dataset of binary strings for the test 
@@ -20,6 +25,8 @@ q = T( end,  :);
 
 % k hamming distance
 k = 2;
+
+% X is the test k nearneighbors
 X = zeros(M, D);
 for i= 1 : M
     r = randi(D, 1, k);  %  k random num that are repeatable
@@ -29,22 +36,20 @@ for i= 1 : M
     %T(end+1, :) = tmp;  % 
     X(i, :) = tmp;
 end
+
 T = [T; X];
 
-% Split the instance p, q in T into l substrings on the 1st layer
-l = 4;
+% Split the instance p in T into l substrings on the 1st layer
+l = 3;
 
-rows = size(T, 1);
+T_n = size(T, 1);
 output = [];   % 
 
-for i = 1 : rows
+for i = 1 : T_n
        % for each instance p
-            
-       %  result = findNearNeighbors(p_new,  q_new, C, options)
-       result = kNN(T(i, :),  q,  k,  l);
+        result = kNN(T(i, :),  q,  k,  l);
 
         % get the index i of the instance p,
-        
         if result == 0,
               output =[output, i]; 
         end

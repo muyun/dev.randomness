@@ -2,7 +2,7 @@ function y = flattenCell(x)
 % flatten a cell array tree structure into a single cell array
 %
 % INPUT:
-%              x = flatten({[1,0],[1]}, {[1,1], [0,1]})
+%              x = flatten({[1,0]  1 }, {[1,1]  [0,1]})
 % 
 % OUTPUT:
 %             y = 
@@ -23,10 +23,10 @@ function y = inner_flatten(x)
         else
               y = {};
               
-             for n = 1:numel(x)  % numel() returns the number of elements in cell x
+             for i = 1:numel(x)  % numel() returns the number of elements in cell x
                  % for each element
                  % get the non-cell structure and store it in y
-                  tmp = inner_flatten(x{n});
+                  tmp = inner_flatten(x{i});
                   
                   y = {y{:}  tmp{:}};
              end

@@ -1,8 +1,8 @@
-﻿###
+﻿###pseudo-code alg for kNN
 
 #### Find all p in T such that H(p, q) <= k
 
-    #init
+    *init
 	     - a T = N x D dataset of binary strings (uniform)
 		 
 		 - a query q (1 x D)
@@ -10,8 +10,7 @@
 		 - a given number k for the hamming distance measure
 	
 	
-	#
-	For each instance p in T , and a query q
+	*For each instance p in T , and a query q
 	
 	     #- split the binary code p into m substrings (chunks)     <--- m <= D/(logN - 1)
 	     #      p_substrings = split(p, m)
@@ -50,12 +49,12 @@
 					end for
 					
 				end if	
-		 -	   	
+		 *	   	
 		 
 	end For		   
 
 	
 ####
 	
-##### TODO: recursion 
+#### Divide-and-conquer alg 
 

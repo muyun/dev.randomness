@@ -17,9 +17,14 @@ if len_x == 1,
 end
 
 %  choose m uniformly random primes here
-p = randi([2, len_x^2],  1,  m);
+%p = randi([2, len_x^2],  1,  m);
+all_ps = primes(len_x^2);
+%len_ps = length(all_ps);
+pick = randi([2, length(all_ps)], 1, m);  %get the uniformly random indexes
+p = all_ps(pick);
 
 % si = Number(x) mod pi
+% x must represent a nonnegative integer value smaller than or equal to 2^52
 s =  mod (bin2dec(x),  p) ;
 
 % for the binary representations (not the string representations here) in the message
