@@ -1,5 +1,5 @@
 function b = decimalToBinaryVector(d)
-% Convert each decimal value in s to binary vector
+% Convert each decimal value in d to binary vector
 %
 %  some code borrows from de2bi.m
 
