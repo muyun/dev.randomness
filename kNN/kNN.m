@@ -1,4 +1,4 @@
-function re = kNN(p,  q, k, l, options)
+function [re, iter] = kNN(p,  q, k, l, options)
 % check whether the binary vector p is the near neighbors of q ( H(p,q) <= k) with the options
 % 
 % INPUT:
@@ -7,11 +7,11 @@ function re = kNN(p,  q, k, l, options)
 %          l                     -   the partition number
 %
 %      options(1)    -    max. number of iteration (default: 100)
-%      options(2)    -    info display during iteration (default: 1)
+%      options(2)    -    info display during iteration (default: 0)
 %
 % OUTPUT:
 %           re                 -    [0, 1] (0 means that p is the k nearneighbor of q; 1 is not)
-%
+%           iter              -   the interation num to get the instance p
 %
 
 if nargin ~=4 && nargin ~= 5,
@@ -20,7 +20,7 @@ end
 
 % the default options
 default_options = [     100;         % max. number of iteration
-                                             1 ];         % info display during iteration
+                                             0 ];         % info display during iteration
 
  if nargin == 4,
        options = default_options;
@@ -30,7 +30,7 @@ default_options = [     100;         % max. number of iteration
             tmp = default_options;
             tmp(1:length(options)) = options;
             options = tmp;
-     end
+      end
      % if some entries of "options" are nan's, replace them with defaults
      nan_index = find(isnan(options)==1);
      options(nan_index) = default_options(nan_index);
@@ -50,23 +50,24 @@ C = (k / length(p)) * l;
 p_substrings = arraySplit(p, l);
 q_substrings = arraySplit(q, l);
 
-% TODO optimize
 p_new = {};
 q_new = {};
+%p_new = cell(1, l);
+%q_new = cell(1, l);
 
 % calculate the unequal number m
-m = 0;
+m = 1;
+iter = 1;
 
 % for each substring
 for i = 1 :  l
-        disp(binaryVectorToString( p_substrings{i} ));
-        disp(binaryVectorToString( q_substrings{i} ));
+        %disp(binaryVectorToString( p_substrings{i} ));
+        %disp(binaryVectorToString( q_substrings{i} ));
 
        %check if p_substrings{i} and p_substrings{i} is Inf; 
-       [result, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 2);
+       [result, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 1);
 
         if result ~= 0,  % pi != qi
-                 m = m + 1;   
                   %  put it in the new p and q  
                   %  To optimize
                   %p_new = [p_new,  p_substrings{i} ];
@@ -74,9 +75,15 @@ for i = 1 :  l
 
                   p_new{m} = p_substrings{i} ;
                   q_new{m} = q_substrings{i} ;
+                  
+                  m = m + 1;  
         end
                                 
 end
+
+%remove the empty cell
+%p_new(m : l)= [];
+%q_new(m : l)= [];
                    
 %             % check p_new, q_new
 %            [result, err] = randomizedProtocol(binaryVectorToString( p_new ), binaryVectorToString( p), 1);
@@ -88,18 +95,18 @@ end
 %                    findNearNeighbors(p_new,  q_new, k,  l^r);
 %            end
             
-if m > k,
+if (m-1) > k,
          % exclude this instance p
          re = 1;
 
 else  % m <= k ,
           % this instance p might be the one we are looking for
-          % goto the next layer 
-           for i = 2 : max_iter  % on the 2nd layer now
-                 [p_new, q_new, m_new]  = stepknn(p_new,  q_new);  % It might use the different struct to deal with p_new, q_new
+           for iter = 2 : max_iter  % on the 2nd layer now
+                % goto the next layer 
+                 [p_new, q_new, m_new]  = stepknn(p_new,  q_new);  % It might use a different struct to deal with p_new, q_new
 
                  if display,
-                     fprintf('Iteration %d\n', i);
+                       fprintf('Iteration %d\n', iter);
                  end
                  
                  % check termination condition
@@ -110,7 +117,7 @@ else  % m <= k ,
 
                   % if  p_new is the same as p before
                   %
-                  if m_new <=  (2^i) * C,  % menas that H(p, q) <= k
+                  if m_new <=  2^iter  *  C,  % menas that H(p, q) <= k
                         re = 0;
                         break;
                   end

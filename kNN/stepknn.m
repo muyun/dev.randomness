@@ -17,30 +17,33 @@ q_substrings = cellSplit(q, l);
 %
 len_ps = numel(p_substrings);
 
-% TODO optimize 
-p_new = {};
-q_new = {};
-%p_new = cell(1, l);
-%q_new = cell(1, l);
+%p_new = {};
+%q_new = {};
+p_new = cell(1, len_ps);
+q_new = cell(1, len_ps);
 
-m = 0;
+m = 1;
 
 for i = 1 : len_ps
        % for each substring
-       disp(binaryVectorToString( p_substrings{i} ));
-       disp(binaryVectorToString( q_substrings{i} ));
+       %disp(binaryVectorToString( p_substrings{i} ));
+       %disp(binaryVectorToString( q_substrings{i} ));
        
        %check if p_substrings{i} and p_substrings{i} is Inf
         [re, err] = randomizedProtocol(binaryVectorToString( p_substrings{i} ), binaryVectorToString( q_substrings{i} ), 1);
-
+      % [re, err] = randomizedProtocol( p_substrings{i} , q_substrings{i} , 1);
         if re ~= 0,  % pi != qi
-                     m = m + 1;  
-                      %  put it in the new p and q  
-                      %  To optimize
+                     %  put it in the new p and q  
+                     % 
                      p_new{m} = p_substrings{i} ;
-                     q_new{m} = q_substrings{i} ;                
+                     q_new{m} = q_substrings{i} ;  
+                     
+                     m = m + 1;  
        end
 end
 
-%p_new()= [];
+%remove the empty cell
+p_new(m:len_ps)= [];
+q_new(m:len_ps)= [];
 
+m = m - 1;

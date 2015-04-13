@@ -8,19 +8,19 @@ function y = flattenCell(x)
 %             y = 
 %                     { [1,0]    [1]    [1,1]    [0,1]} 
 %
-%  some code borrows from flatten.m
 %
-if ~iscell(x)
+
+if ~iscell(x),
      error('flatten only works on cell arrays.');
 end
 
 y = inner_flatten(x);
 
 function y = inner_flatten(x)
-        if  ~iscell(x),
+      if  ~iscell(x),
               y = {x};
               
-        else
+       else
               y = {};
               
              for i = 1:numel(x)  % numel() returns the number of elements in cell x
@@ -31,4 +31,4 @@ function y = inner_flatten(x)
                   y = {y{:}  tmp{:}};
              end
     
-end
+      end
