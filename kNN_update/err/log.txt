@@ -1,0 +1,35 @@
+The err case:  
+--------------------------------
+K>> isequal(bin_x, bin_y)
+
+ans =
+
+     0
+  
+K>> d1 = round(pdist2(bin_x, bin_y, 'hamming')*625)
+
+d1 =
+
+    11
+ 
+ 
+K>> x1 = bi2de(bin_x)
+
+x1 =
+
+  1.3609e+188
+
+K>> y1 = bi2de(bin_y)
+
+y1 =
+
+  1.3609e+188
+
+  
+K>> isequal(x1, y1)
+
+ans =
+
+     1
+
+--------------------------------
