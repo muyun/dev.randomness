@@ -18,6 +18,11 @@
   
   * 
 
+#### numeric computations [7]
+
+  
+####   
+
 #### reference
 [1]: http://undocumentedmatlab.com/blog/internal-matlab-memory-optimizations "Internal Matlab memory optimization"
 [2]: http://www.mathworks.com/company/newsletters/articles/accelerating-matlab-algorithms-and-applications.html?s_eid=PSM_8410&utm_content=buffer80dd4&utm_medium=social&utm_source=plus.google.com&utm_campaign=buffer#Performance
@@ -27,4 +32,7 @@
 [5]: http://www.mathworks.com/company/newsletters/articles/accelerating-matlab-algorithms-and-applications.html?s_eid=PSM_8410&utm_content=buffer80dd4&utm_medium=social&utm_source=plus.google.com&utm_campaign=buffer#Performance 
 "Accelerating MATLAB Algorithms and Applications"
 [6]: http://undocumentedmatlab.com/blog/profiling-matlab-memory-usage/ "Profiling Matlab memory usage"
+[7]: http://www.mathworks.com/help/symbolic/digits.html "Variable-precision accuracy"
+[8]: http://matlab.cheme.cmu.edu/archive/ "Matlab at CMU"
+[9]: http://www.math.mtu.edu/~msgocken/intro/node1.html "Matlab tutorial"
 	 

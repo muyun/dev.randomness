@@ -27,13 +27,13 @@ probe =  probe & ~probe_mask;
 % for each probe, calc weighing factor with a candid
 for j = 1:nuser
         pmask = ~probe_mask(j, :);
-        if sum(pmask(:)) == 0; % skip this case
+        if any(pmask) == 0; % skip this case
             continue;
         end
 
         for i = 1:nuser                        
                 gmask = ~gallery_mask(i, :);
-                 if sum(pmask(:)) == 0; % skip this case
+                 if any(pmask) == 0; % skip this case
                      continue;
                  end
 
@@ -146,7 +146,7 @@ knnhitrate = cumsum(knnhit)/nuser;
 
 figure(3); hold on;
 title('The Indexing Performance');
-axis([0, ncandid,75, 100]);
+axis([0, ncandid,40, 100]);
 plot(hammhitrate*100, 'k*--', 'MarkerSize', 8);
 plot(knnhitrate*100, 'r.--', 'MarkerSize',8);
 xlabel('Penetration Rate (%)', 'FontSize', 14);
