@@ -9,7 +9,7 @@ function [nnid, dist]= LSH(q, T, L, H, K, flag)
 %                     L   -    the number of hash tables
 %                     H  -     the width parameter
 %                     K  -     appr. nearest neighbors of q
-%                     flag -  [0, 1]  (1 means to display the debug info; 0 is not)
+%                     flag -  whether to display the debug info
 %
 %  OUTPUT:
 %                      nnid   -   indices of appr. nearest neighbors in T
@@ -59,15 +59,10 @@ for i = 1: L
                  v = T(j, :); 
                  bin = v(r);   % randomly chosen hash function
 
-                  %As the total number of buckets may be large,
-                  %might use the standard hashing to compress the buckets
-                   
-                  % Here,  standard hash functions to reduce the amout of
+                  %As the total number of buckets may be large, standard hash functions to reduce the amout of
                   % memory used per hash table to O(n)
                    
-                  % To create prime and modulo prime from the last few bits and store them as bucket entries in the LSH tables
-                  % To contruct the hash function
-                  key = bi2de(bin,'left-msb');  % hash the h binary vector to a natural number
+                  key = bi2de(bin,'left-msb');  % hash the H binary vector to a natural number
                   %[p, s] = second_hash(bin, m);  %  s as the bucket entry
                     
                   if flag == 1,
@@ -128,7 +123,6 @@ end
 dist = dist(sid);
 nnid = nnid(sid);
 
-%standard hash functions to reduce the amout of memory used per hash table to O(n)
 %based on randomized protocol
 % return the prime p and the module prime s
 function [p, s] = second_hash(bin, m)

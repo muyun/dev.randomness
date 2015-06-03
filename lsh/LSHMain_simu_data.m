@@ -11,7 +11,7 @@ M  = 2;
 L = 11;  % the number of hash tables
 %
 H = L;   % the width parameter, (should be more than 5)
-B = 3; % the max bucket size, should be less than h
+B = 3; % the max bucket size, should be less than H
 
 K = 2;
 %T = zeros(N, D);
