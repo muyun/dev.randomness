@@ -1,6 +1,6 @@
-function [nnid, num]= LSH(q, T, l, h, n, flag)
-% Locality-Sensitive Hashing Scheme based on Random Bits Sampling
+function [nnid, num]= ANN_single(q, T, l, h, n, flag) 
 % Return the n (or less) appr. nearest neighbors of query q found in set T
+%LSH based on Random Bits Sampling
 %
 %  INPUT: 
 %                     T  -      A set  for vectors

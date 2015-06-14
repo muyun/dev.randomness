@@ -1,29 +1,32 @@
-function [nnid, num]= LSH(q, T, l, h, n, flag)
+function [Ind, cnt]= ANN(T, Q, l, h, ncandid, ~)
+% find  the approximate set of near neighbors
 % Locality-Sensitive Hashing Scheme based on Random Bits Sampling
-% Return the n (or less) appr. nearest neighbors of query q found in set T
+% Return the ncandid (or less) appr. nearest neighbors of each query q in set Q found in set T
 %
 %  INPUT: 
 %                     T  -      A set  for vectors
-%                     q  -      the query vector
+%                     Q  -      query set
 %           
 %                     l   -    the number of hash tables
 %                     h  -     the width parameter
-%                     n  -     appr. nearest neighbors of each query q in Q
+%                     ncandid  -     appr. nearest neighbors of each query q in Q
 %
 %                     flag -  whether to display the debug info
 %
 %  OUTPUT:
-%                      nnid   -   indices of appr. nearest neighbors in T
-%                      num   -    the corresponding collision count
+%                      Ind   -   the first ncandid (or less) candidated indices
+%                      cnt    -   the number of collision
 %
 
+
+%% Init
 if nargin < 6,
      flag = 0;  % donot display for the debug info
 end
 
 D = size(T, 2);
 T_n = size(T, 1);   % gallery
-%Q_n = size(Q, 1);  %  probe
+Q_n = size(Q, 1);  %  probe
 
 % the bucket index length
 BL = floor(h/3); % (<h)
@@ -49,11 +52,11 @@ for i = 1 : l
     hashtables{i} = containers.Map('KeyType','uint32', 'ValueType','any');  
 end
 
-if flag == 1,
-    bucketkeys = cell(T_n, l); % just use for the test
-end
+% if flag == 1,
+%     bucketkeys = cell(T_n, l); % just use for the test
+% end
 
-%%Database Preprocessing
+%% Database Preprocessing
 % construct l hash tables, each corresponding to a different hash function g
 for i = 1: l
        %for each  hash table
@@ -71,10 +74,10 @@ for i = 1: l
               
                  [ind, s] = secondhash(bin, prim, m); % get the bucket index ind, and the entry s
                   
-                  if flag == 1,
-                          bucketkeys{j, i} = ind;
-                          %entries{j, i} = s;
-                  end
+%                   if flag == 1,
+%                           bucketkeys{j, i} = ind;
+%                           %entries{j, i} = s;
+%                   end
                       
                   if  isKey(func, ind), % in the bucket of the hashtable?
                           b = func(ind);
@@ -94,40 +97,66 @@ end
 
 %% Query answering algorithm to perform similarity search
 %   return the n appr. nearest neighbors for the query vector q
-cnt = zeros(T_n, l);
-for i = 1 : l  % 
-      % for each hashtable
-       qr =  g{i}; % the hash functions are applied to the query q
-       bin_q = q(qr);   % iterates over the l hash functions g
-       
-      [key, s] = secondhash(bin_q, prim, m);
-       
-       func_q = hashtables{i};  % the map function
-          
-       % all the vectors in the same buckets as q are retrieved as candidates 
-       if isKey(func_q, key), 
-            % the same bucket
-             inds = func_q(key);  %
-             
-             for ii = 1 : length(inds)
-                 ind = inds(ii);
-                 
-                 % the same entry - consider this as the same 
-                 if isequal(s, entries{ind, i}), % get the modulo prime
-                       cnt(ind, i) = cnt(ind, i) + 1;
-                 end
-                 
-             end
-             
-       end      
+%annhit = zeros(1, ncandid);
+Ind = zeros(Q_n, ncandid);
+cnt = zeros(Q_n, ncandid);
+for j = 1 : Q_n  % in probe
+       % each instance q in probe Q
+        q = Q(j, :);
+        
+        num = zeros(T_n, l);
+        for i = 1 : l  % 
+              % for each hashtable
+               qr =  g{i}; % the hash functions are applied to the query q
+               bin_q = q(qr);   % iterates over the l hash functions g
 
-end
+              [key, s] = secondhash(bin_q, prim, m);
 
-%rank the candidates (only those vectors that collide with q) according to the collision count
-[num, nnid] = sort(sum(cnt, 2), 'descend');
-if length(nnid) >= n,  %get the first n candidates
-       nnid = nnid(1:n);
-       num = num(1:n);
+               func_q = hashtables{i};  % the map function
+
+               % all the vectors in the same buckets as q are retrieved as candidates 
+               if isKey(func_q, key), 
+                    % the same bucket
+                     inds = func_q(key);  %
+
+                     for ii = 1 : length(inds)
+                         ind = inds(ii);
+
+                         % the same entry - consider this as the same 
+                         if isequal(s, entries{ind, i}), % get the modulo prime
+                               num(ind, i) = num(ind, i) + 1;
+                         end
+
+                     end
+
+               end      
+
+        end
+
+        %rank the candidates (only those vectors that collide with q) according to the collision count
+        % or sort it with the estimated hamming distance?
+        [num, nnid] = sort(sum(num, 2), 'descend');
+        
+        len_nnid = length(nnid);
+        if  len_nnid >= ncandid,  %get the first ncandid candidates
+               Ind(j, :) = nnid(1:ncandid);
+               cnt(j, :) = num(1:ncandid);
+        else
+               Ind(j, 1:len_nnid) = nnid;
+               cnt(j, 1:len_nnid) = num;
+        end
+        
+%        out = [nnid, cnt];
+%         fprintf('Q%d appr. %d-NNS (collision count): \n', j, ncandid);
+%         fprintf('%5d(%d)', out');
+%         fprintf('\n');
+        
+%         % performance evaluation
+%          ishit = (nnid(:, 1) == j);
+%          if any(ishit),
+%                annhit(ishit) = annhit(ishit) + 1;
+%          end
+        
 end
 
 

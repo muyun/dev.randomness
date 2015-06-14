@@ -9,7 +9,7 @@ N = 100;
 % M nearneighbors for the test
 M  = 10;
 %The search vector q
-Q_n = 3; % the search size
+Q_n = 4; % the search size
 
 %
 l = 35;  %hash table number; the larger
@@ -86,14 +86,31 @@ flag = 1;  %display the debug info
 % l is the number of hash tables
 % h is the width parameter
 % 
-% return the performance evaluation
-annhit = ANN(Q, T, l, h, ncandid, flag);
+% return the
+[Ind, cnt] = ANN(T, Q, l, h, ncandid, flag);
+
+annhit = zeros(1, ncandid);
+ for i = 1 : Q_n  % in probe
+       %
+        out = [Ind(i, :); cnt(i, :)];
+        fprintf('Q%d appr. %d-NNS (collision count): \n', i, ncandid);
+        fprintf('%5d(%d)', out);
+        fprintf('\n');
+     
+        % performance evaluation
+         ishit = (Ind(i, :) == i);
+         if any(ishit),
+               annhit(ishit) = annhit(ishit) + 1;
+         end
+         
+end
  
+%
 hammhitrate = cumsum(hammhit) / Q_n;
 annhitrate = cumsum(annhit) / Q_n;
 
 %%
-figure(3); hold on;
+figure(4); hold on;
 title('The Indexing Performance on simulation dataset');
 axis([0, ncandid,75, 100]);
 plot(hammhitrate*100, 'k*--', 'MarkerSize', 8);
