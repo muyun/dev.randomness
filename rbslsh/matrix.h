@@ -125,9 +125,6 @@ namespace lsh
 
             return row;
 			*/
-
-			//std::vector<T> row = matrix[i];
-			//return row;
 			
 			//return 	reinterpret_cast<T*>(dims + i*dim);
 
@@ -183,107 +180,17 @@ namespace lsh
 				return;
 			}
 
-			/*
-			//reset(_dim, _N);
-			//std::vector<std::vector<T>> points;
 			std::vector<T> points;
 			T point;
-			while (std::getline(file, pointline)){
-			//
-
-			std::vector<T> vec(line.begin(), line.end());
-			vec.push_back('\0');
-			std::cout <<"line: " + line << std::endl;
-
-			std::vector<T> row;
-			for (std::vector<T>::iterator iter = vec.begin(); iter < vec.end() - 1; ++iter){
-			std::cout << *iter << std::endl;
-			row.push_back(*iter);
-			}
-
-			for (unsigned i = 0; i < row.size(); ++i){
-			std::cout << row[i];
-			//dims[i] = vec[i];
-			}
-			std::cout << std::endl;
-
-			// wrong
-			//dims[i]  = &vec;
-
-			// ith vector
-			points.push_back(row);
-
-			//dims[i] = vec.data();
-
-			//
-			std::cout << point << std::endl;
-			points.push_back(point);
-			}
-			*/
-			//std::vector<std::vector<T>> points;
-			//vector<T> vec;
-			/*
-			for (unsigned i = 0; i < _N; ++i){
-			for (unsigned j = 0; j < _dim; ++j){
-			file >> dims;
-			//file >> vec.push_back();
-			}
-			} */
-
-			//dims = new T[dim * N];
-
-			std::vector<T> points;
-			T point;
-			//unsigned i = 0;
-			//unsigned row = 0;
 			while (file >> point){
 
 				//file >> point;
 				//std::cout << point << std::endl;
 				points.push_back(point);
-
-                /*
-				unsigned mod = i % _dim;
-				if (mod == 0){
-					dims[row] = new vector<T>(_dim);
-					//row++;
-				}
-
-				// each row
-				//unsigned mod_ = i % _N;
-				dims[row].push_back(point);
-
-				/*
-				int ind = i * _dim;
-
-				unsigned mod = i % _dim;
-				if (mod == 0){  // each row
-				std::vector<T> row;
-				row.push_back(point);
-				}
-
-				//
-				dims[i] = row;
-
-				points.push_back(row);
-
-				
-				i++;
-				*/
 				
             }
-			//points.push_back('\0');
 
 			file.close();
-
-			/*
-			// print the data
-              
-			for (unsigned i = 0; i < _N * _dim; ++i){
-				//std::cout << points[i] << std::endl;
-				dims[i] = points[i];
-			}
-			*/
 
 			for (unsigned i = 0; i < _N; ++i){
 				//dims[i] = new std::vector<T>(_dim);

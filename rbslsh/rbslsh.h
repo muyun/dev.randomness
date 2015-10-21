@@ -225,8 +225,6 @@ namespace lsh{
 			*/
 
 			// rank the candidates indices
-			//std::vector<unsigned> results;
-			//unsigned id;
 			for (std::vector<unsigned>::iterator iter = inds.begin(); iter != inds.end(); ++iter){
 				unsigned max = std::count(inds.begin(), inds.end(), *iter);
 				unsigned id = *iter;
