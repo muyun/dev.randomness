@@ -7,8 +7,6 @@
 #include "stdafx.h"
 #include "matrix.h"
 #include "rbslsh.h"
-#include <vector>
-
 
 int main(int argc, char** argv[])
 {
