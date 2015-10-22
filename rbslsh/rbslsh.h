@@ -8,6 +8,7 @@
 
 #pragma once
 #include <iostream>
+#include <fstream>
 //#include <map>
 /*  unordered_map containers are faster (because hash is O(1), binary search tree is O(logn) )
 than map containers to access individual elements by their key, although they are generally less efficient
@@ -87,21 +88,11 @@ namespace lsh{
 			std::random_device rd;
 			std::mt19937 rng(rd());
 			//std::mt19937 rng(unsigned(std::time(0));
-			std::uniform_int_distribution<unsigned> rndbit(0, param.D - 1); // the random index
-
-			/*
-			// choosing the first h in D
-			for (int i = 0; i < param.H - 1; ++i){
-				// the random chosen bit
-				unsigned bit = rnd(rng);
-
-				std::cout << bit << " ";
-            }
-			std::cout << std::endl;
-			*/
- 
+			
+			// the the random index
 			seqs.resize(param.L);
-			for (std::vector<std::vector<unsigned>>::iterator iter = seqs.begin(); iter != seqs.end(); ++iter){
+			std::uniform_int_distribution<unsigned> rndbit(0, param.D - 1); 
+            for (std::vector<std::vector<unsigned>>::iterator iter = seqs.begin(); iter != seqs.end(); ++iter){
 			   	//each hash table
 
 				// choosing the first h in D
@@ -212,7 +203,7 @@ namespace lsh{
 					{
 						//in the vector
 						//std::cout << (*iter) << std::endl;
-						// get the unique ind
+						// insert the unique ind
 						inds.push_back(*iter);
 					}
 				} //if
@@ -238,24 +229,44 @@ namespace lsh{
 					}
 				}
 
-				//get the max cnt
-				//result.push_back(id);
 				sinds.insert(id);
 			}
 
 			//return inds;
 		}
-		
 
-		/*
-		// read the data
-		void Read(const std::string& file){
+		// save the result to the file
+		template <typename T>
+		void Save(const std::string& filename, std::set<T>& inds){
+			unsigned i, j;
 
-		}
-		*/
+			/*
+			fout = fopen(filename, "w");
+			if (!fout) {
+			printf("Cannot open output file.\n");
+			exit(1);
+			} */
 
-		// save the model
-		void Save(){
+			std::ofstream file(filename, std::fstream::app|std::fstream::out);
+			unsigned k = 0;
+			if (file.is_open()){
+				//
+				for (std::set<T>::iterator iter = inds.begin(); iter != inds.end(); ++iter){
+					++k;
+					if (k > param.K){
+						break;
+					}
+
+					std::cout << *iter << ",";
+					file << *iter <<",";
+                }
+				std::cout << std::endl;
+				file << std::endl;
+
+				file.flush();
+			}
+
+			file.close();
 		}
 
 		// load the model

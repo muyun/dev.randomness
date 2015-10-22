@@ -167,6 +167,8 @@ namespace lsh
 		* Load the Matrix from a text file
 		* @param _N   Number of vectors
 		* @param _dim Dimension of each vector
+		*
+		* TODO: to optimize
 		*/
 		void load(const std::string& path, int _N, int _dim){
 			//allocate the memory
@@ -180,19 +182,57 @@ namespace lsh
 				return;
 			}
 
+			/*
+			//reset(_dim, _N);
+			//std::vector<std::vector<T>> points;
 			std::vector<T> points;
 			T point;
+			while (std::getline(file, pointline)){
+			//
+
+			std::vector<T> vec(line.begin(), line.end());
+			vec.push_back('\0');
+			std::cout <<"line: " + line << std::endl;
+
+			std::vector<T> row;
+			for (std::vector<T>::iterator iter = vec.begin(); iter < vec.end() - 1; ++iter){
+			std::cout << *iter << std::endl;
+			row.push_back(*iter);
+			}
+
+			}
+			*/
+
+
+			std::vector<T> points;
+			T point;
+			//unsigned i = 0;
+			//unsigned row = 0;
 			while (file >> point){
 
 				//file >> point;
-				//std::cout << point << std::endl;
 				points.push_back(point);
+
+				/*
+				int ind = i * _dim;
+
+				unsigned mod = i % _dim;
+				if (mod == 0){  // each row
+				std::vector<T> row;
+				row.push_back(point);
+				}
+
+				dims[i] = row;
+                points.push_back(row);
+
+				i++;
+				*/
 				
             }
 
 			file.close();
 
-			for (unsigned i = 0; i < _N; ++i){
+            for (unsigned i = 0; i < _N; ++i){
 				//dims[i] = new std::vector<T>(_dim);
                 for (unsigned j = 0; j < _dim; ++j){
 					//std::cout << points[i*_dim + j] << " ";

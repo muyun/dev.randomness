@@ -9,79 +9,6 @@
 #include "rbslsh.h"
 #include <vector>
 
-/*
-template <typename T>
-void read_points(std::vector<std::vector<T>>& matrix, std::string& path, unsigned rows, unsigned cols)
-{
-	std::ifstream file(path);
-	if (!file){
-		std::cout << "Cannot open input file." << std::endl;
-		return;
-	}
-
-	std::vector<T> points;
-	T point;
-	//unsigned i = 0;
-	//unsigned row = 0;
-	while (file >> point){
-
-		//file >> point;
-		//std::cout << point << std::endl;
-		points.push_back(point);
-	}
-	//points.push_back('\0');
-
-	file.close();
-
-	std::vector<uchar>::iterator iter = points.begin();
-	for (unsigned i = 0; i != rows; ++i){
-		unsigned ind = i * cols;	  // each row
-
-		//std::vector<uchar> row(iter + ind, iter + ind + cols);
-
-		for (unsigned j = 0; j != cols; ++j){
-			//matrix[i][j] = row[j];
-			matrix[i][j] = points[ind + j];
-			std::cout << matrix[ind][j] << " ";
-		}
-		std::cout << "\n";
-	}
-
-}
-*/
-
-template <typename T>
-void write_results(std::vector<std::vector<size_t>>& points, const std::string& filename, int rows, int cols)
-{
-	//FILE* fout;
-	//int* p;
-	unsigned i, j;
-
-	/*
-	fout = fopen(filename, "w");
-	if (!fout) {
-	printf("Cannot open output file.\n");
-	exit(1);
-	} */
-	std::ofstream file(filename);
-
-	if (file.is_open()){
-
-		for (i = 0; i < rows; ++i) {
-			for (j = 0; j < points[i].size(); j++) {
-				file << points[i][j] << " ";
-				//cout << points[i][j] << " ";
-			}
-			//cout << endl;
-			file << std::endl;
-			file.flush();
-		}
-	}
-
-	file.close();
-	//fclose(fout);
-}
-
 
 int main(int argc, char** argv[])
 {
@@ -113,25 +40,6 @@ int main(int argc, char** argv[])
 	}
 	*/
 
-	/*
-	for (unsigned i = 0; i != rows; ++i){
-		//int ind = i * cols;
-		//std::cout << dataset[i][] << std::endl;
-
-		//std::vector<unsigned char>	vec(dataset[i],dataset + sizeof(dataset)/sizeof);
-		//std::cout <<"hello"<< std::endl;
-
-		//std::vector<unsigned char> row;
-		
-		for (unsigned j = 0; j != cols; ++j){
-			unsigned y = ind + j;
-			//row.push_back(dataset[y]);
-			//std::cout << dataset[ind + j];
-		}
-		
-	}
-    */
-
 	// L - number of hash tables
 	// H - the width parameter
 	// K - appr. nearest neighbors of each query q in Q
@@ -156,30 +64,23 @@ int main(int argc, char** argv[])
 	}
 
 	// Query
-	//Todo, using the gallery data source
+	//TODO, using the gallery data source
+	std::string result = "E:\\wenlong\\documents\\proj\\thecode\\rbslsh\\data\\result.dat";
+	
 	int num = 5;
 	std::set<unsigned> inds;
 	for (unsigned ind = 0; ind != num; ++ind){
 		mylsh.Query(inds,dataset[ind]);
 	
         //display
-		std::cout << "The first " << param.K <<  " neighbors for the query : " << ind <<std::endl;
-		unsigned k = 0;
-	    for (std::set<unsigned>::iterator iter = inds.begin(); iter != inds.end(); ++iter){
-		   std::cout << (*iter) << " ";
-
-		   k++;
-		   if (k > param.K){
-			   break;
-		   }
-	    }
-	    std::cout << std::endl;
+		std::cout << "The first " << param.K <<  " neighbors for the query " << ind <<std::endl;
+		
+		//Write the file
+		mylsh.Save(result, inds);
 
 		//clear
 		inds.clear();
 	}
-
-	// write the file
 
 	return 0;
 }
