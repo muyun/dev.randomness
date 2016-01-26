@@ -13,4 +13,4 @@
 ####rbslsh
     an implementation in C++   
 
-#### matlab.md - matlab coding tipis     
+#### matlab.md - matlab coding tips     
