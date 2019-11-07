@@ -18,14 +18,13 @@
 #### matlab.md - matlab coding tips     
 * Vectorization  
 
-[copy-on-write mechanism] 1 transparently allocates a temporary copy of the data only when it sees that the input data is modified.
+* [copy-on-write mechanism] 1 transparently allocates a temporary copy of the data only when it sees that the input data is modified.
 
-[ In-place data manipulation ] 1 means that the original data block is modified rather than creating a new block with the modified data, thus saving any memory allocations and deallocations.
-
-* in-place optimization
-
-* when returning data from a function, we should try to update the original data variable whenever possible, avoiding the need for allocation of a new variable.
+* [ In-place data manipulation ] 1 means that the original data block is modified rather than creating a new block with the modified data, thus saving any memory allocations and deallocations.
+  - in-place optimization  
+  - when returning data from a function, we should try to update the original data variable whenever possible, avoiding the need for allocation of a new variable.  
 
 * Profiling for Improving performance
 
 
+* numeric computations
