@@ -15,7 +15,7 @@
 #### rbslsh
 * an implementation in C++   
 
-#### matlab.md - matlab coding tips     
+##### matlab.md - matlab coding tips     
 * Vectorization  
 
 * [copy-on-write mechanism] 1 transparently allocates a temporary copy of the data only when it sees that the input data is modified.
